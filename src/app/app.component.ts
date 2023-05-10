@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+import { SessionManagerService } from './services/session-manager.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'redux-ingresos-egresos';
+  constructor(
+    private session: SessionManagerService
+  ){
+    this.session.initializeSession();
+  }
 }
