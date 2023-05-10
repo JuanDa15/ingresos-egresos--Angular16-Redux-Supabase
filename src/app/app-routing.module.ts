@@ -10,10 +10,7 @@ import { DetalleComponent } from './ingreso-egreso/detalle/detalle.component';
 const routes: Routes = [
   {
     path: 'auth',
-    children: [
-      { path: 'login', component: LoginComponent },
-      { path: 'register', component: RegisterComponent },
-    ]
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
   {
       path: '',
