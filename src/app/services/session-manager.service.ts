@@ -13,8 +13,7 @@ export class SessionManagerService {
     if (session === null) {
       throw new Error('No session exist');
     }
-    const { data: { user }} =
-      await this.db.supabase.auth.getUser(session.access_token)
+    const { data: { user }} = await this.db.supabase.auth.getUser(session.access_token)
     return user;
   }
 
@@ -32,4 +31,10 @@ export class SessionManagerService {
     return error;
   }
 
+  public async initializeSession() {
+    const { error } = await this.db.supabase.auth.initialize();
+    if (error !== null) {
+      throw new Error(JSON.stringify(error))
+    }
+  }
 }
