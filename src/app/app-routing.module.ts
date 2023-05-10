@@ -8,7 +8,6 @@ import { MainComponent } from './ingreso-egreso/main/main.component';
 import { DetalleComponent } from './ingreso-egreso/detalle/detalle.component';
 
 const routes: Routes = [
-
   {
     path: 'auth',
     children: [
