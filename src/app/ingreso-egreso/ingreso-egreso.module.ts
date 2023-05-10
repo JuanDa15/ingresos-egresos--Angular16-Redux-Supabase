@@ -13,7 +13,7 @@ import { MainComponent } from './main/main.component';
     MainComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
   ]
 })
 export class IngresoEgresoModule { }
