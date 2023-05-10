@@ -1,38 +1,92 @@
-
 <div class="page-body-wrapper full-page-wrapper auth-page">
-  <div class="content-wrapper d-flex align-items-center auth register-bg-1 theme-one">
+  <div
+    class="content-wrapper d-flex align-items-center auth register-bg-1 theme-one"
+  >
     <div class="row w-100">
       <div class="col-lg-4 mx-auto">
         <h2 class="text-center mb-4">Registro</h2>
         <div class="auto-form-wrapper">
-          <form action="#">
+          <form [formGroup]="form()" (ngSubmit)="createUser()">
             <div class="form-group">
               <div class="input-group">
-                <input type="email" class="form-control" placeholder="Correo">
+                <input
+                  type="email"
+                  class="form-control"
+                  placeholder="Correo"
+                  formControlName="email"
+                  [class.is-valid]="emailControl?.valid"
+                  [class.is-invalid]="emailControl?.invalid"
+                />
                 <div class="input-group-append">
                   <span class="input-group-text">
-                    <i class="fa fa-check-circle"></i>
+                    <i
+                      class="fa fa-check-circle"
+                      *ngIf="emailControl?.valid"
+                    ></i>
+                    <i class="fa fa-times" *ngIf="emailControl?.invalid"></i>
                   </span>
                 </div>
               </div>
             </div>
             <div class="form-group">
               <div class="input-group">
-                <input type="password" class="form-control" placeholder="Password">
+                <input
+                  type="password"
+                  class="form-control"
+                  placeholder="Password"
+                  formControlName="password"
+                  [class.is-valid]="passwordControl?.valid"
+                  [class.is-invalid]="passwordControl?.invalid"
+                />
                 <div class="input-group-append">
                   <span class="input-group-text">
-                    <i class="fa fa-check-circle"></i>
+                    <i
+                      class="fa fa-check-circle"
+                      *ngIf="passwordControl?.valid"
+                    ></i>
+                    <i class="fa fa-times" *ngIf="passwordControl?.invalid"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <input
+                  type="password"
+                  class="form-control"
+                  placeholder="Confirm password"
+                  formControlName="check_password"
+                  [class.is-valid]="checkPasswordControl?.valid"
+                  [class.is-invalid]="checkPasswordControl?.invalid"
+                />
+                <div class="input-group-append">
+                  <span class="input-group-text">
+                    <i
+                      class="fa fa-check-circle"
+                      *ngIf="checkPasswordControl?.valid"
+                    ></i>
+                    <i
+                      class="fa fa-times"
+                      *ngIf="checkPasswordControl?.invalid"
+                    ></i>
                   </span>
                 </div>
               </div>
             </div>
 
             <div class="form-group">
-              <button class="btn btn-primary submit-btn btn-block">Crear cuenta</button>
+              <button
+                class="btn btn-primary submit-btn btn-block"
+                type="submit"
+              >
+                Crear cuenta
+              </button>
             </div>
             <div class="text-block text-center my-3">
-              <span class="text-small font-weight-semibold">ya tienes una cuenta?</span>
-              <br>
+              <span class="text-small font-weight-semibold"
+                >ya tienes una cuenta?</span
+              >
+              <br />
               <a routerLink="/login" class="text-black text-small">Login</a>
             </div>
           </form>
