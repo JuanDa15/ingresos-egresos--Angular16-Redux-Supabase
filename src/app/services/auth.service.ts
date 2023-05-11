@@ -10,10 +10,10 @@ export class AuthService {
 
 
   public async signUp(credentials: AuthCredentials) {
-    const {data: {session, user}, error} = await this._db.supabase.auth.signUp(credentials);
+    return this._db.supabase.auth.signUp(credentials);
   }
 
   public async logIn(credentials: AuthCredentials) {
-    const { data: {session, user}, error } = await this._db.supabase.auth.signInWithPassword(credentials);
+    return this._db.supabase.auth.signInWithPassword(credentials);
   }
 }

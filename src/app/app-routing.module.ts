@@ -11,7 +11,7 @@ const routes: Routes = [
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
   {
-      path: '',
+      path: 'dashboard',
       component: DashboardComponent,
       children: [
         { path: '', component: EstadisticaComponent },
