@@ -37,7 +37,6 @@ export class UpdateDataComponent implements OnInit{
 
   async signOut() {
     const currentSession = await this.session.signOut();
-    console.log(currentSession);
     (currentSession) && this.router.navigateByUrl('/auth/login');
   }
 
