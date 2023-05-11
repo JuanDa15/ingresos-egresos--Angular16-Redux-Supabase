@@ -27,14 +27,19 @@ export class LoginComponent {
     if(this.form().invalid)return;
     const { email, password } = this.form().value;
     this.auth.logIn({email, password})
-      .then(({data, error}) => {
+      .then(async({data, error}) => {
         if (error) {
           this._manageErrors(error)
           return;
         }
         (data.user) && (this.session.user = data.user);
         this.notifications.success('Login successfully')
-        this.router.navigateByUrl('/dashboard')
+
+        const resp = await this.session.hasUpdatedData();
+
+        (resp)
+          ? this.router.navigate(['/dashboard'])
+          : this.router.navigate(['/auth/update-data', data.user?.id]);
       })
       .catch(e => {throw new Error(e)})
   }
