@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthError } from '@supabase/supabase-js';
 import { AuthService } from 'src/app/services/auth.service';
+import { NotificationsService } from 'src/app/services/notifications.service';
 
 @Component({
   selector: 'app-register',
@@ -12,7 +13,9 @@ import { AuthService } from 'src/app/services/auth.service';
 export class RegisterComponent {
   public fb = inject(FormBuilder);
   public auth = inject(AuthService);
-  public router = inject(Router)
+  public router = inject(Router);
+  public notifications = inject(NotificationsService);
+
   public form = signal<FormGroup>(this.fb.group({
     email: [null, [Validators.required, Validators.email]],
     password: [null, [Validators.required]],
@@ -38,12 +41,13 @@ export class RegisterComponent {
         this._manageErrors(error)
         return;
       }
+      this.notifications.success('Register successfully')
       this.router.navigateByUrl('/dashboard')
     })
     .catch(e => {throw new Error(e)})
 }
 
   private _manageErrors(error: AuthError) {
-    console.log(error)
+    this.notifications.error(`Error ${error.status}: ${error.cause}`)
   }
 }

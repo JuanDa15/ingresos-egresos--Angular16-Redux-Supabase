@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from '@angular/router';
 import { AuthError } from '@supabase/supabase-js';
 import { AuthService } from 'src/app/services/auth.service';
+import { NotificationsService } from 'src/app/services/notifications.service';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,8 @@ export class LoginComponent {
   public fb = inject(FormBuilder);
   public router = inject(Router)
   private auth = inject(AuthService);
+  public notifications = inject(NotificationsService);
+
   public form = signal<FormGroup>(this.fb.group({
     email: [null, [Validators.required, Validators.email]],
     password: [null, Validators.required]
@@ -27,12 +30,13 @@ export class LoginComponent {
           this._manageErrors(error)
           return;
         }
+        this.notifications.success('Login successfully')
         this.router.navigateByUrl('/dashboard')
       })
       .catch(e => {throw new Error(e)})
   }
 
   private _manageErrors(error: AuthError) {
-    console.log(error)
+    this.notifications.error(`Error ${error.status}: ${error.message}`)
   }
 }
