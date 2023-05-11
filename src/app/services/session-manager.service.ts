@@ -63,13 +63,22 @@ export class SessionManagerService {
   public async signOut() {
     const { error } = await this.db.supabase.auth.signOut();
     if (error !== null) {
-      this.notification.error(error.message)
-      throw new Error(JSON.stringify(error));
+      return false;
     }
-    return error;
+    return true;
   }
 
   public async initializeSession() {
     await this.updateUser();
+  }
+
+  public async hasUpdatedData(): Promise<boolean> {
+    const user = await this.getUser();
+    const { data, error} = await this.db.supabase.from('user_information').select('updated').eq('uid', user?.id);
+    if (error) {
+      this.notification.error(error.message);
+      return false
+    }
+    return data[0]['updated'];
   }
 }
