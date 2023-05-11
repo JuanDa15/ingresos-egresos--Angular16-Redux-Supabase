@@ -10,7 +10,16 @@ export class AuthService {
 
 
   public async signUp(credentials: AuthCredentials) {
-    return this._db.supabase.auth.signUp(credentials);
+    return this._db.supabase.auth.signUp(credentials)
+      .then(async({data, error}) => {
+        await this._db.supabase.from('user_information').insert({
+          uid: data.user?.id,
+          names: null,
+          last_names: null,
+          email: credentials.email
+        })
+        return {data,error};
+      })
   }
 
   public async logIn(credentials: AuthCredentials) {
