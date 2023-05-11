@@ -39,17 +39,25 @@ export class SessionManagerService {
   }
 
   public async getSession() {
-    const { data: {session}, error } =
-        await this.db.supabase.auth.getSession()
+    let sessionToReturn = null;
+    const { data: {session}, error } = await this.db.supabase.auth.getSession();
+    sessionToReturn = session;
     if (error) {
       this.notification.error(error.message);
       return null;
     }
     if (!session) {
       this.notification.error('No session exist');
+      return null;
     }
 
-    return session;
+    const refreshSession = await this.db.supabase.auth.refreshSession({
+      refresh_token: session?.refresh_token
+    });
+    this.user = refreshSession.data.user;
+    sessionToReturn = refreshSession.data.session;
+
+    return sessionToReturn;
   }
 
   public async signOut() {
@@ -63,17 +71,5 @@ export class SessionManagerService {
 
   public async initializeSession() {
     await this.updateUser();
-  }
-
-  public async refreshSession() {
-    const currentSession = await this.getSession();
-    if (currentSession) {
-
-      const {data: { user }} = await this.db.supabase.auth.refreshSession({
-        refresh_token: currentSession.refresh_token
-      })
-
-      this.user = user;
-    }
   }
 }
