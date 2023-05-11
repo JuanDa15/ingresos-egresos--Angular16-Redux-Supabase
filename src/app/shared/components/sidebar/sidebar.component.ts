@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { NotificationsService } from 'src/app/services/notifications.service';
 import { SessionManagerService } from 'src/app/services/session-manager.service';
 
 @Component({
@@ -8,4 +9,5 @@ import { SessionManagerService } from 'src/app/services/session-manager.service'
 })
 export class SidebarComponent {
   public session = inject(SessionManagerService)
+  public notifications = inject(NotificationsService)
 }

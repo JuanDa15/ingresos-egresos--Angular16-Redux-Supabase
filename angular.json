@@ -20,6 +20,11 @@
             "outputPath": "dist/redux-ingresos-egresos",
             "index": "src/index.html",
             "main": "src/main.ts",
+            "allowedCommonJsDependencies": [
+              "native-toast",
+              "websocket",
+              "cross-fetch"
+            ],
             "polyfills": [
               "zone.js"
             ],

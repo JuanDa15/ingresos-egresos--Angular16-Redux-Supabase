@@ -1,26 +1,27 @@
 import { Injectable } from '@angular/core';
-import { Notyf } from 'notyf';
+import * as nativeToast from 'native-toast';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationsService {
-  public notyf = new Notyf({
-    dismissible: true,
-    duration: 3000,
-    position: {
-      x: 'right',
-      y: 'top'
-    },
-    ripple: true
-  })
-
-
-  success(payload: string) {
-    this.notyf.success(payload)
+  success(message: string) {
+    nativeToast({
+      closeOnClick: true,
+      message: message,
+      position: 'north-east',
+      icon: true,
+      type: 'success'
+    })
   }
 
-  error(payload: string) {
-    this.notyf.error(payload)
+  error(message: string) {
+    nativeToast({
+      closeOnClick: true,
+      message: message,
+      position: 'north-east',
+      icon: true,
+      type: 'error'
+    })
   }
 }

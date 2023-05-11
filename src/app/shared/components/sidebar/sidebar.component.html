@@ -2,10 +2,9 @@
   <ul class="nav">
     <li class="nav-item nav-profile">
       <div class="nav-link">
-
         <div class="user-wrapper">
           <div class="profile-image">
-            <img src="assets/images/faces/face1.jpg" alt="profile image">
+            <img src="assets/images/faces/face1.jpg" alt="profile image" />
           </div>
 
           <div class="text-wrapper">
@@ -15,7 +14,6 @@
             </div>
           </div>
         </div>
-
       </div>
     </li>
 
@@ -39,13 +37,15 @@
         <span class="menu-title">Detalle</span>
       </a>
     </li>
-
     <li class="nav-item">
-      <a routerLink="/auth/login" (click)="session.signOut()"  class="nav-link cursor">
+      <a
+        routerLink="/auth/login"
+        (click)="session.signOut(); notifications.success('Sign out success')"
+        class="nav-link cursor"
+      >
         <i class="menu-icon fa fa-sign-out-alt"></i>
         <span class="menu-title">Cerrar sesión</span>
       </a>
     </li>
-
   </ul>
 </nav>
