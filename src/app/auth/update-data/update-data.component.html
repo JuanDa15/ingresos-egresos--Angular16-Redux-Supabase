@@ -1,0 +1,47 @@
+<nav class="navbar navbar-light bg-light">
+  <div class="row w-100">
+    <div class="col-2">
+      <a class="navbar-brand">Navbar</a>
+    </div>
+
+    <div class="ml-auto col-2">
+      <button class="btn btn-outline-danger" (click)="signOut()">
+        Sign up
+      </button>
+    </div>
+  </div>
+</nav>
+
+
+<div class="w-100 h-100">
+  <div class="container">
+    <h2 class="text-center mb-4 mt-2">update your data</h2>
+
+    <div class="row">
+      <div class="col col-md-6 col-lg-8 mx-auto">
+        <form [formGroup]="form()" (ngSubmit)="updateData()">
+
+          <div class="form-group">
+            <label for="">Nombres*</label>
+            <input class="form-control" type="text" formControlName="names">
+          </div>
+          <div class="form-group">
+            <label for="">Apellidos*</label>
+            <input class="form-control" type="text" formControlName="last_names">
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary">
+              <span *ngIf="!loading()">Actualizar</span>
+              <span *ngIf="loading()">
+                <i class="fas fa-circle-notch fa-spin"></i> Actualizando
+              </span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+</div>
