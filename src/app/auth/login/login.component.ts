@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthError } from '@supabase/supabase-js';
 import { AuthService } from 'src/app/services/auth.service';
 import { NotificationsService } from 'src/app/services/notifications.service';
+import { SessionManagerService } from 'src/app/services/session-manager.service';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +16,7 @@ export class LoginComponent {
   public router = inject(Router)
   private auth = inject(AuthService);
   public notifications = inject(NotificationsService);
+  public session = inject(SessionManagerService);
 
   public form = signal<FormGroup>(this.fb.group({
     email: [null, [Validators.required, Validators.email]],
@@ -30,6 +32,7 @@ export class LoginComponent {
           this._manageErrors(error)
           return;
         }
+        (data.user) && (this.session.user = data.user);
         this.notifications.success('Login successfully')
         this.router.navigateByUrl('/dashboard')
       })
