@@ -1,4 +1,4 @@
-import { Injectable, Signal, inject, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { NotificationsService } from './notifications.service';
 import { BehaviorSubject } from 'rxjs';
@@ -14,9 +14,13 @@ export class SessionManagerService {
   public db = inject(SupabaseService);
   public notification = inject(NotificationsService)
 
-  set user(val: User) {
+  set user(val: User | null) {
     this._user.set(val);
     this._userSubject$.next(this._user())
+  }
+
+  get user(): User | null {
+    return this._user()
   }
 
   public async getUser() {
@@ -37,10 +41,12 @@ export class SessionManagerService {
   public async getSession() {
     const { data: {session}, error } =
         await this.db.supabase.auth.getSession()
-
     if (error) {
       this.notification.error(error.message);
       return null;
+    }
+    if (!session) {
+      this.notification.error('No session exist');
     }
 
     return session;
@@ -57,5 +63,17 @@ export class SessionManagerService {
 
   public async initializeSession() {
     await this.updateUser();
+  }
+
+  public async refreshSession() {
+    const currentSession = await this.getSession();
+    if (currentSession) {
+
+      const {data: { user }} = await this.db.supabase.auth.refreshSession({
+        refresh_token: currentSession.refresh_token
+      })
+
+      this.user = user;
+    }
   }
 }
