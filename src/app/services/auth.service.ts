@@ -11,18 +11,23 @@ export class AuthService {
 
   public async signUp(credentials: AuthCredentials) {
     return this._db.supabase.auth.signUp(credentials)
-      .then(async({data, error}) => {
-        await this._db.supabase.from('user_information').insert({
+      .then(({data, error}) => {
+        return this._db.supabase.from('user_information').insert({
           uid: data.user?.id,
           names: null,
           last_names: null,
           email: credentials.email
         })
-        return {data,error};
       })
+      .catch(e => console.log(e))
   }
 
   public async logIn(credentials: AuthCredentials) {
-    return this._db.supabase.auth.signInWithPassword(credentials);
+    return this._db.supabase.auth.signInWithPassword(credentials)
+      .then(({data: {user}}) => {
+        return this._db.supabase.from('user_information')
+          .select('*').eq('uid', user?.id)
+      })
+      .catch(e => console.log(e))
   }
 }

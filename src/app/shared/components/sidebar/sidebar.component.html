@@ -1,6 +1,6 @@
 <nav class="sidebar sidebar-offcanvas">
   <ul class="nav">
-    <li class="nav-item nav-profile" *ngIf="user()">
+    <li class="nav-item nav-profile" *ngIf="(user$ |async) as user">
       <div class="nav-link">
         <div class="user-wrapper">
           <div class="profile-image">
@@ -8,7 +8,7 @@
           </div>
 
           <div class="text-wrapper">
-            <p class="profile-name">{{user()?.email}}</p>
+            <p class="profile-name">{{user.names}} {{user.last_names}}</p>
             <div>
               <small class="designation text-muted">Gerente</small>
             </div>
@@ -25,9 +25,9 @@
     </li>
 
     <li class="nav-item">
-      <a routerLink="/ingreso-egreso" class="nav-link">
+      <a routerLink="/dashboard/ingreso-egreso" class="nav-link">
         <i class="menu-icon fa fa-clipboard-list"></i>
-        <span class="menu-title">Ingresos y Egresos</span>
+        <span class="menu-title" >Ingresos y Egresos</span>
       </a>
     </li>
 
@@ -40,7 +40,7 @@
     <li class="nav-item">
       <a
         routerLink="/auth/login"
-        (click)="session.signOut(); notifications.success('Sign out success')"
+        (click)="logOut()"
         class="nav-link cursor"
       >
         <i class="menu-icon fa fa-sign-out-alt"></i>

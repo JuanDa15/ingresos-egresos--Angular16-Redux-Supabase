@@ -1,27 +1,17 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { NotificationsService } from './notifications.service';
-import { BehaviorSubject } from 'rxjs';
-import { User } from '@supabase/supabase-js';
+import { Store } from '@ngrx/store';
+import { setUser } from '../reducers/auth.actions';
+import { DBUser } from '../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionManagerService {
-  private _user = signal<null | User>(null);
-  private _userSubject$ = new BehaviorSubject<null | User>(this._user())
-  public userObservable$ = this._userSubject$.asObservable();
   public db = inject(SupabaseService);
   public notification = inject(NotificationsService)
-
-  set user(val: User | null) {
-    this._user.set(val);
-    this._userSubject$.next(this._user())
-  }
-
-  get user(): User | null {
-    return this._user()
-  }
+  public store = inject(Store);
 
   public async getUser() {
     const session = await this.getSession();
@@ -34,8 +24,10 @@ export class SessionManagerService {
     const session = await this.getSession();
     if (session === null) { return }
     const { data: { user }} = await this.db.supabase.auth.getUser(session.access_token);
-    this._user.set(user);
-    this._userSubject$.next(user);
+    const updatedUser = await this.db.supabase.from('user_information').select('*').eq('uid', user?.id);
+    this.store.dispatch(setUser({
+      user: (updatedUser.data?.pop() as DBUser) || null
+    }))
   }
 
   public async getSession() {
@@ -54,7 +46,7 @@ export class SessionManagerService {
     const refreshSession = await this.db.supabase.auth.refreshSession({
       refresh_token: session?.refresh_token
     });
-    this.user = refreshSession.data.user;
+
     sessionToReturn = refreshSession.data.session;
 
     return sessionToReturn;

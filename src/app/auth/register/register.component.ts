@@ -1,7 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthError } from '@supabase/supabase-js';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/reducers/app.reducer';
+import { setLoading, stopLoading } from 'src/app/reducers/ui.actions';
 import { AuthService } from 'src/app/services/auth.service';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { SessionManagerService } from 'src/app/services/session-manager.service';
@@ -17,6 +19,7 @@ export class RegisterComponent {
   public router = inject(Router);
   public notifications = inject(NotificationsService);
   public session = inject(SessionManagerService);
+  public store: Store<AppState> = inject(Store);
 
   public form = signal<FormGroup>(this.fb.group({
     email: [null, [Validators.required, Validators.email]],
@@ -35,22 +38,23 @@ export class RegisterComponent {
   }
 
   public async createUser(): Promise<void> {
-    if(this.form().invalid) return;
+    if (this.form().invalid) return;
+    this.store.dispatch(setLoading());
     const { email, password } = this.form().value;
     this.auth.signUp({ email, password })
-    .then(({data, error}) => {
-      if (error) {
-        this._manageErrors(error)
-        return;
-      }
-      (data.user) && (this.session.user = data.user);
-      this.notifications.success('Register successfully')
-      this.router.navigateByUrl('/dashboard')
-    })
-    .catch(e => {throw new Error(e)})
-}
+      .then(async (resp) => {
+        this.notifications.success('Register successfully');
+        this._redirect();
+      })
+      .catch(e => {
+        this.store.dispatch(stopLoading());
+        this.notifications.error(e)
+      })
+  }
 
-  private _manageErrors(error: AuthError) {
-    this.notifications.error(`Error ${error.status}: ${error.cause}`)
+  private async _redirect() {
+    const user = await this.session.getUser()
+    this.store.dispatch(stopLoading());
+    this.router.navigate(['/auth/update-data', user?.id]);
   }
 }

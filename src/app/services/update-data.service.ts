@@ -10,6 +10,6 @@ export class UpdateDataService {
   async updateData(names: string, last_names: string, id: string) {
     return this.bd.supabase.from('user_information')
       .update({ names, last_names, updated: true })
-      .eq('uid', id).throwOnError();
+      .eq('uid', id).select().throwOnError();
   }
 }
