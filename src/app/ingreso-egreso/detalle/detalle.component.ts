@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Transaction } from 'src/app/interfaces/transaction.interface';
+import { AppState } from 'src/app/reducers/app.reducer';
+import { TransactionsService } from 'src/app/services/transactions.service';
 
 @Component({
   selector: 'app-detalle',
@@ -6,5 +10,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./detalle.component.scss']
 })
 export class DetalleComponent {
+  public store: Store<AppState> = inject(Store)
+  public transaction = inject(TransactionsService)
+  public data = this.store.select(({transactions}) => transactions.data)
 
+  delete( item: Transaction ) {
+    if(item.id == null) return;
+    this.transaction.deleteTransaction(item.id)
+  }
 }

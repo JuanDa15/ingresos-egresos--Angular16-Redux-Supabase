@@ -2,7 +2,7 @@ import { Injectable, OnDestroy, inject, signal } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { NotificationsService } from './notifications.service';
 import { Store } from '@ngrx/store';
-import { setUser } from '../reducers/auth.actions';
+import { clearUser, setUser } from '../reducers/auth.actions';
 import { DBUser } from '../interfaces/user.interface';
 import { AppState } from '../reducers/app.reducer';
 import { Subscription } from 'rxjs';
@@ -73,6 +73,7 @@ export class SessionManagerService implements OnDestroy {
     if (error !== null) {
       return false;
     }
+    this.store.dispatch(clearUser())
     this.store.dispatch(clearTransactions())
     return true;
   }

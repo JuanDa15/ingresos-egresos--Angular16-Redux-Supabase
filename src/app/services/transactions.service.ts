@@ -18,7 +18,13 @@ export class TransactionsService {
   public notifications = inject(NotificationsService)
   public store: Store<AppState> = inject(Store)
 
+  async deleteTransaction(id: string) {
+    const { data, error } = await this.db.supabase.from('income-outcome')
+      .delete()
+      .eq('id', id)
 
+    console.log(data, error)
+  }
 
   async createTransaction(transaction: Transaction) {
     const user = this.session.user();
@@ -45,6 +51,7 @@ export class TransactionsService {
     const user = this.session.user();
     this.transactionSubs = this.db.supabase.channel('any')
       .on('postgres_changes', { event: '*', schema: '*', table: 'income-outcome', filter: `uid=eq.${user?.uid}` }, async() => {
+        console.log('updated');
         await this.getTransactions();
       }).subscribe()
   }

@@ -14,6 +14,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.transactionsService.cancelSubscription()
+    // this.transactionsService.cancelSubscription()
   }
 }
