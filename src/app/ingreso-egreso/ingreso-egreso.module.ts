@@ -6,6 +6,10 @@ import { MainComponent } from './main/main.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { IngresoEgresoModuleRoutingModule } from './ingreso-egreso-routing.module';
 import { OrderByPipe } from '../pipes/order-by.pipe';
+import { CalcIncomesPipe } from '../pipes/calc-incomes.pipe';
+import { ItemsQuantityPipe } from '../pipes/items-quantity.pipe';
+import { CalcBalancePipe } from '../pipes/calc-balance.pipe';
+import { NgChartsModule } from 'ng2-charts';
 
 
 
@@ -14,12 +18,16 @@ import { OrderByPipe } from '../pipes/order-by.pipe';
     DetalleComponent,
     EstadisticaComponent,
     MainComponent,
-    OrderByPipe
+    OrderByPipe,
+    CalcIncomesPipe,
+    ItemsQuantityPipe,
+    CalcBalancePipe
   ],
   imports: [
     CommonModule,
     IngresoEgresoModuleRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgChartsModule
   ]
 })
 export class IngresoEgresoModule { }

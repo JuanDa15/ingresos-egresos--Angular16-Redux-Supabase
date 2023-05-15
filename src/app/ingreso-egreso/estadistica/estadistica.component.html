@@ -1,8 +1,8 @@
-<div class="row">
-  <div class="col-6">
+<ng-container *ngIf="data | async as arr">
+  <div class="row">
+    <div class="col-6">
       <div class="card card-statistics">
         <div class="card-body">
-
           <div class="clearfix">
             <div class="float-left">
               <i class="fa fa-money-bill-alt text-success icon-lg"></i>
@@ -10,36 +10,90 @@
             <div class="float-right">
               <p class="mb-0 text-right">Ingresos</p>
               <div class="fluid-container">
-                <h3 class="font-weight-medium text-right mb-0">$65,650</h3>
+                <h3 class="font-weight-medium text-right mb-0">
+                  {{ arr | calcIncomes : "income" | currency : "COP" }}
+                </h3>
               </div>
             </div>
           </div>
           <p class="text-muted mt-3 mb-0">
-            <i class="mdi mdi-alert-octagon mr-1" aria-hidden="true"></i> 65% lower growth
+            <i class="mdi mdi-alert-octagon mr-1" aria-hidden="true"></i>
+            <i class="mdi mdi-alert-octagon mr-1" aria-hidden="true"></i>
+            {{ arr | itemsQuantity : "income" }} items
           </p>
         </div>
       </div>
     </div>
 
     <div class="col-6">
-        <div class="card card-statistics">
-          <div class="card-body">
-
-            <div class="clearfix">
-              <div class="float-left">
-                <i class="fa fa-shipping-fast text-danger icon-lg"></i>
-              </div>
-              <div class="float-right">
-                <p class="mb-0 text-right">Ingresos</p>
-                <div class="fluid-container">
-                  <h3 class="font-weight-medium text-right mb-0">$65,650</h3>
-                </div>
+      <div class="card card-statistics">
+        <div class="card-body">
+          <div class="clearfix">
+            <div class="float-left">
+              <i class="fa fa-shipping-fast text-danger icon-lg"></i>
+            </div>
+            <div class="float-right">
+              <p class="mb-0 text-right">Ingresos</p>
+              <div class="fluid-container">
+                <h3 class="font-weight-medium text-right mb-0">
+                  {{ arr | calcIncomes : "outcome" | currency : "COP" }}
+                </h3>
               </div>
             </div>
-            <p class="text-muted mt-3 mb-0">
-              <i class="mdi mdi-alert-octagon mr-1" aria-hidden="true"></i> 65% lower growth
-            </p>
+          </div>
+          <p class="text-muted mt-3 mb-0">
+            <i class="mdi mdi-alert-octagon mr-1" aria-hidden="true"></i>
+            <i class="mdi mdi-alert-octagon mr-1" aria-hidden="true"></i>
+            {{ arr | itemsQuantity : "outcome" }} items
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3" >
+    <div class="col-12">
+      <div class="card card-statistics">
+        <div class="card-body">
+          <div class="clearfix">
+            <div class="float-left">
+              <i class="fa fa-building text-info icon-lg"></i>
+            </div>
+            <div class="float-right">
+              <p class="mb-0 text-right">Diferencia</p>
+              <div class="fluid-container">
+                <h3
+                  [ngClass]="{
+                    'text-success': (arr | calcBalance) > 0,
+                    'text-danger': (arr | calcBalance) < 0
+                  }"
+                  class="font-weight-medium text-right mb-0"
+                >
+                  {{ arr | calcBalance | currency }}
+                </h3>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-</div>
+    </div>
+  </div>
+
+  <div class="row mt-2">
+    <div
+      class="col-12"
+      *ngIf="(arr | calcIncomes : 'income') > 0 || (arr | calcIncomes : 'outcome') > 0"
+    >
+      <div class="card card-statistics">
+        <div class="card-body">
+          <h1 class="card-title">GrÃ¡fica</h1>
+
+          <canvas baseChart class="chart"
+                  [data]="doughnutChartData()"
+                  type="doughnut">
+          </canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
