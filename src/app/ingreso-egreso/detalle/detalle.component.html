@@ -15,16 +15,18 @@
             </thead>
 
             <tbody>
-              <tr *ngFor="let item of data | async">
-                <td>{{item.description}}</td>
-                <td>{{item.amount | currency}}</td>
-                <td [class.text-success]="item.type === 'income'" [class.text-danger]="item.type === 'outcome'">{{item.type}}</td>
-                <td>
-                  <button class="btn btn-danger" (click)="delete( item )">
-                    <i class="fas fa-trash"></i>
-                  </button>
-                </td>
-              </tr>
+              <ng-container *ngIf="(data | async) as arr">
+                <tr *ngFor="let item of arr | orderBy">
+                  <td>{{item.description}}</td>
+                  <td>{{item.amount | currency}}</td>
+                  <td [class.text-success]="item.type === 'income'" [class.text-danger]="item.type === 'outcome'">{{item.type}}</td>
+                  <td>
+                    <button class="btn btn-danger" (click)="delete( item )">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </ng-container>
             </tbody>
 
           </table>

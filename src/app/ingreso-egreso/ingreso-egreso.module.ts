@@ -5,6 +5,7 @@ import { EstadisticaComponent } from './estadistica/estadistica.component';
 import { MainComponent } from './main/main.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { IngresoEgresoModuleRoutingModule } from './ingreso-egreso-routing.module';
+import { OrderByPipe } from '../pipes/order-by.pipe';
 
 
 
@@ -13,6 +14,7 @@ import { IngresoEgresoModuleRoutingModule } from './ingreso-egreso-routing.modul
     DetalleComponent,
     EstadisticaComponent,
     MainComponent,
+    OrderByPipe
   ],
   imports: [
     CommonModule,
