@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { DetalleComponent } from './detalle/detalle.component';
 import { EstadisticaComponent } from './estadistica/estadistica.component';
 import { MainComponent } from './main/main.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { IngresoEgresoModuleRoutingModule } from './ingreso-egreso-routing.module';
 
 
 
@@ -10,10 +12,12 @@ import { MainComponent } from './main/main.component';
   declarations: [
     DetalleComponent,
     EstadisticaComponent,
-    MainComponent
+    MainComponent,
   ],
   imports: [
     CommonModule,
+    IngresoEgresoModuleRoutingModule,
+    ReactiveFormsModule
   ]
 })
 export class IngresoEgresoModule { }

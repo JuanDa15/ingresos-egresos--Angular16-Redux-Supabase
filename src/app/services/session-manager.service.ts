@@ -1,17 +1,33 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, OnDestroy, inject, signal } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { NotificationsService } from './notifications.service';
 import { Store } from '@ngrx/store';
 import { setUser } from '../reducers/auth.actions';
 import { DBUser } from '../interfaces/user.interface';
+import { AppState } from '../reducers/app.reducer';
+import { Subscription } from 'rxjs';
+import { clearTransactions } from '../reducers/transaction.actions';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SessionManagerService {
+export class SessionManagerService implements OnDestroy {
+  public subscriptions = signal<Subscription[]>([])
+  public user = signal<DBUser | null>(null);
   public db = inject(SupabaseService);
   public notification = inject(NotificationsService)
-  public store = inject(Store);
+  public store: Store<AppState> = inject(Store);
+
+  constructor() {
+    const sub = this.store.select(({auth}) => auth.user).subscribe({
+      next: (user) => this.user.set(user)
+    })
+    this.subscriptions().push(sub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions().forEach(s => s.unsubscribe)
+  }
 
   public async getUser() {
     const session = await this.getSession();
@@ -57,6 +73,7 @@ export class SessionManagerService {
     if (error !== null) {
       return false;
     }
+    this.store.dispatch(clearTransactions())
     return true;
   }
 
