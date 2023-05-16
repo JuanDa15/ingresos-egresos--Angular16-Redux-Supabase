@@ -1,9 +1,14 @@
 import { createReducer, on } from "@ngrx/store";
 import { Transaction } from "../interfaces/transaction.interface";
 import { clearTransactions, setTransactions } from "./transaction.actions";
+import { AppState } from "./app.reducer";
 
 export interface TransactionState {
   data: Transaction[]
+}
+
+export interface AppStateWithTransaction extends AppState {
+  transactions:  TransactionState;
 }
 
 const initialState: TransactionState = {

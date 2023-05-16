@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { ChartData } from 'chart.js';
 import { Transaction } from 'src/app/interfaces/transaction.interface';
 import { AppState } from 'src/app/reducers/app.reducer';
+import { AppStateWithTransaction } from 'src/app/reducers/transaction.reducer';
 
 @Component({
   selector: 'app-estadistica',
@@ -12,7 +13,7 @@ import { AppState } from 'src/app/reducers/app.reducer';
 export class EstadisticaComponent implements OnInit{
   public cd = inject(ChangeDetectorRef);
 
-  public store: Store<AppState> = inject(Store)
+  public store: Store<AppStateWithTransaction> = inject(Store)
   public data = this.store.select(({transactions}) => transactions.data)
   public doughnutChartData = signal<ChartData<'doughnut'>>({
     labels: [ 'Incomes', 'Outcomes' ],

@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { filter } from 'rxjs';
 import { Transaction } from 'src/app/interfaces/transaction.interface';
-import { AppState } from 'src/app/reducers/app.reducer';
+import { AppStateWithTransaction } from 'src/app/reducers/transaction.reducer';
 import { TransactionsService } from 'src/app/services/transactions.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { TransactionsService } from 'src/app/services/transactions.service';
   styleUrls: ['./detalle.component.scss']
 })
 export class DetalleComponent {
-  public store: Store<AppState> = inject(Store)
+  public store: Store<AppStateWithTransaction> = inject(Store)
   public transaction = inject(TransactionsService)
   public data = this.store.select(({transactions}) => transactions.data).pipe(filter(item => item.length > 0))
 

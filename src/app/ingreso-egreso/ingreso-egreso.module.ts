@@ -10,6 +10,8 @@ import { CalcIncomesPipe } from '../pipes/calc-incomes.pipe';
 import { ItemsQuantityPipe } from '../pipes/items-quantity.pipe';
 import { CalcBalancePipe } from '../pipes/calc-balance.pipe';
 import { NgChartsModule } from 'ng2-charts';
+import { StoreModule } from '@ngrx/store';
+import { transactionReducer } from '../reducers/transaction.reducer';
 
 
 
@@ -25,6 +27,7 @@ import { NgChartsModule } from 'ng2-charts';
   ],
   imports: [
     CommonModule,
+    StoreModule.forFeature('transactions', transactionReducer),
     IngresoEgresoModuleRoutingModule,
     ReactiveFormsModule,
     NgChartsModule
